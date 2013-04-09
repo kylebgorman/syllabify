@@ -51,9 +51,6 @@ def syllabify(pron, alaska_rule=True):
     """
     Syllabifies a CMU dictionary (ARPABET) word string
 
-    1. Alaska rule must bleed onset maximization: a.las.ka
-    2. Front onglides in 
-
     # Alaska rule:
     >>> pretty(syllabify('AH0 L AE1 S K AH0'.split())) # Alaska
     '-AH0-.L-AE1-S.K-AH0-'
