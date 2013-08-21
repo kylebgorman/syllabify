@@ -173,8 +173,8 @@ def syllabify(pron, alaska_rule=True):
     output = zip(onsets, nuclei, codas)
     flat_output = list(chain.from_iterable(chain.from_iterable(output)))
     if flat_output != mypron:
-        raise ValueError("could not syllabify {}, got {}".format(mypron, flat_output))
-
+        raise ValueError("could not syllabify {}, got {}".format(mypron, 
+                                                           flat_output))
     return output
 
 
