@@ -22,6 +22,8 @@
 # 
 # syllabify.py: prosodic parsing of ARPABET entries
 
+from itertools import chain
+
 ## constants
 slax   = {'IH1', 'IH2', 'EH1', 'EH2', 'AE1', 'AE2', 'AH1', 'AH2', 
                                                     'UH1', 'UH2',}
@@ -50,9 +52,6 @@ o3 = {('S', 'T', 'R'), ('S', 'K', 'L'), ('T', 'R', 'W')} # "octroi"
 def syllabify(pron, alaska_rule=True):
     """
     Syllabifies a CMU dictionary (ARPABET) word string
-
-    1. Alaska rule must bleed onset maximization: a.las.ka
-    2. Front onglides in 
 
     # Alaska rule:
     >>> pprint(syllabify('AH0 L AE1 S K AH0'.split())) # Alaska
@@ -169,7 +168,14 @@ def syllabify(pron, alaska_rule=True):
             coda.append(onsets[i].pop(0))
         # store coda
         codas.insert(i - 1, coda)
-    return zip(onsets, nuclei, codas)
+
+    ## verify that all segments are included in the ouput
+    output = zip(onsets, nuclei, codas)
+    flat_output = list(chain.from_iterable(chain.from_iterable(output)))
+    if flat_output != mypron:
+        raise ValueError("could not syllabify {}, got {}".format(mypron, flat_output))
+
+    return output
 
 
 def pprint(syllab):
