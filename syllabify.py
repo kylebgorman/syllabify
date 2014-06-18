@@ -25,18 +25,18 @@
 from itertools import chain
 
 ## constants
-slax   = {'IH1', 'IH2', 'EH1', 'EH2', 'AE1', 'AE2', 'AH1', 'AH2', 
+SLAX   = {'IH1', 'IH2', 'EH1', 'EH2', 'AE1', 'AE2', 'AH1', 'AH2', 
                                                     'UH1', 'UH2',}
-vowels = {'IY1', 'IY2', 'IY0', 'EY1', 'EY2', 'EY0', 'AA1', 'AA2', 'AA0',
+VOWELS = {'IY1', 'IY2', 'IY0', 'EY1', 'EY2', 'EY0', 'AA1', 'AA2', 'AA0',
           'ER1', 'ER2', 'ER0', 'AW1', 'AW2', 'AW0', 'AO1', 'AO2', 'AO0',
           'AY1', 'AY2', 'AY0', 'OW1', 'OW2', 'OW0', 'OY1', 'OY2', 'OY0',
           'IH0', 'EH0', 'AE0', 'AH0', 'UH0', 'UW1', 'UW2', 'UW0', 'UW',
           'IY',  'EY',  'AA',  'ER',   'AW', 'AO',  'AY',  'OW',  'OY',  
-          'UH',  'IH',  'EH',  'AE',  'AH',  'UH',} | slax
+          'UH',  'IH',  'EH',  'AE',  'AH',  'UH',} | SLAX
 
 ## licit medial onsets
 
-o2 = {('P', 'R'), ('T', 'R'), ('K', 'R'), ('B', 'R'), ('D', 'R'),
+O2 = {('P', 'R'), ('T', 'R'), ('K', 'R'), ('B', 'R'), ('D', 'R'),
       ('G', 'R'), ('F', 'R'), ('TH', 'R'), 
       ('P', 'L'), ('K', 'L'), ('B', 'L'), ('G', 'L'), 
       ('F', 'L'), ('S', 'L'),
@@ -44,7 +44,7 @@ o2 = {('P', 'R'), ('T', 'R'), ('K', 'R'), ('B', 'R'), ('D', 'R'),
       ('S', 'P'), ('S', 'T'), ('S', 'K'),
       ('HH', 'Y'), # "clerihew"
       ('R', 'W'),}
-o3 = {('S', 'T', 'R'), ('S', 'K', 'L'), ('T', 'R', 'W')} # "octroi"
+O3 = {('S', 'T', 'R'), ('S', 'K', 'L'), ('T', 'R', 'W')} # "octroi"
 
 # This does not represent anything like a complete list of onsets, but 
 # merely those that need to be maximized in medial position.
@@ -143,7 +143,7 @@ def syllabify(pron, alaska_rule=True):
     onsets = []
     i = -1
     for (j, seg) in enumerate(mypron):
-        if seg in vowels:
+        if seg in VOWELS:
             nuclei.append([seg])
             onsets.append(mypron[i + 1:j]) # actually interludes, r.n.
             i = j                        
@@ -156,14 +156,14 @@ def syllabify(pron, alaska_rule=True):
             nuclei[i - 1].append(onsets[i].pop(0))
         if len(onsets[i]) > 2 and onsets[i][-1] == 'Y':
             nuclei[i].insert(0, onsets[i].pop())
-        if len(onsets[i]) > 1 and alaska_rule and nuclei[i-1][-1] in slax \
+        if len(onsets[i]) > 1 and alaska_rule and nuclei[i-1][-1] in SLAX \
                                               and onsets[i][0] == 'S':
             coda.append(onsets[i].pop(0))
         # onset maximization
         depth = 1
         if len(onsets[i]) > 1:
-            if tuple(onsets[i][-2:]) in o2:
-                depth = 3 if tuple(onsets[i][-3:]) in o3 else 2
+            if tuple(onsets[i][-2:]) in O2:
+                depth = 3 if tuple(onsets[i][-3:]) in O3 else 2
         for j in xrange(len(onsets[i]) - depth):
             coda.append(onsets[i].pop(0))
         # store coda
